@@ -28,7 +28,7 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { :host => 'https://steve-saas-app.herokuapp.com/' }
+  config.action_mailer.default_url_options = { :host => 'https://steve-saas-roclmbr.c9users.io/' }
     
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
