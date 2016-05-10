@@ -28,7 +28,6 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(project_params)
     @project.users << current_user
-
     respond_to do |format|
       if @project.save
         format.html { redirect_to root_url, notice: 'Project was successfully created.' }
@@ -61,8 +60,8 @@ class ProjectsController < ApplicationController
   end
   
   def users
-    @project_user = (@project.users + (User.where(tenant_id: @tenant.id, is_admin: true))) - [current_user]
-    @other_users = @tenant.users.where(tenant_id: @tenant.id, is_admin: false) - (@project_users + [current_user])
+    @project_users = (@project.users + (User.where(tenant_id: @tenant.id, is_admin: true))) - [current_user]
+    @other_users = @tenant.users.where(is_admin: false) - (@project_users + [current_user])
   end
   
   def add_user
@@ -71,11 +70,12 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project_user.save
         format.html { redirect_to users_tenant_project_url(id: @project.id, tenant_id: @project.tenant_id),
-              notice: "User was successfully added to project" }
+          notice: "User was successfully added to project" }
       else
         format.html { redirect_to users_tenant_project_url(id: @project.id, tenant_id: @project.tenant_id),
-              error: "User was not added to project" }
+          error: "User was not added to project" }
       end
+    end
   end
 
   private
@@ -88,15 +88,15 @@ class ProjectsController < ApplicationController
     def project_params
       params.require(:project).permit(:title, :details, :expected_completion_date, :tenant_id)
     end
-    
+  
     def set_tenant
       @tenant = Tenant.find(params[:tenant_id])
     end
-    
+  
     def verify_tenant
       unless params[:tenant_id] == Tenant.current_tenant_id.to_s
         redirect_to :root, 
-            flash: { error: 'You are not authorized to access any organization than your own' }
+              flash: { error: 'You are not authorized to access any organization other than your own'}
       end
     end
 end

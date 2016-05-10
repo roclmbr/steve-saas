@@ -1,5 +1,5 @@
 module ApplicationHelper
-    ALERT_TYPES = [:success, :info, :warning, :danger] unless const_defined?(:ALERT_TYPES)
+  ALERT_TYPES = [:success, :info, :warning, :danger] unless const_defined?(:ALERT_TYPES)
 
   def bootstrap_flash(options = {})
     flash_messages = []
@@ -18,7 +18,8 @@ module ApplicationHelper
         class: "alert fade in alert-#{type} #{tag_class}"
       }.merge(options)
 
-      close_button = content_tag(:button, raw("&times;"), type: "button", class: "close", "data-dismiss" => "alert")
+      close_button = content_tag(:button, raw("&times;"), type: "button", class: "close", 
+        "data-dismiss" => "alert")
 
       Array(message).each do |msg|
         text = content_tag(:div, close_button + msg, tag_options)
